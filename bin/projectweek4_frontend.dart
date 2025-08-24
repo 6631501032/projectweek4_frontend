@@ -36,12 +36,32 @@ Future<Map<String, dynamic>?> login() async {
 
 //========== Future Menu ==========
 Future<void> menu(Map<String, dynamic> userInfo) async {
-  print("===================== Expenses Tracking App =====================");
-  print("Welcome ${userInfo['username']}");
-  print("1. All expenses");
-  print("2. Today's expense");
-  print("3. Search expense");
-  print("4. Add expense");
-  print("5. Delete expense");
-  print("6. Exit");
+  while (true) {
+    print("===================== Expenses Tracking App =====================");
+    print("Welcome ${userInfo['username']}");
+    print("1. All expenses");
+    print("2. Today's expense");
+    print("3. Search expense");
+    print("4. Add expense");
+    print("5. Delete an expense");
+    print("6. Exit");
+    stdout.write("Choose...");
+    String? choice = stdin.readLineSync()?.trim();
+    if (choice == "1") {
+      // get all expenses
+    } else if (choice == "2") {
+      // get Today expenses
+    } else if (choice == "3") {
+      // searching expenses
+    } else if (choice == "4") {
+      // add expenses
+    } else if (choice == "5") {
+      // delete expenses
+    } else if (choice == "6") {
+      print("Exiting menu...");
+      break;
+    } else {
+      print("Invalid choice");
+    }
+  }
 }
