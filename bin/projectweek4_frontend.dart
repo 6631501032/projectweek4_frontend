@@ -4,15 +4,15 @@ import 'dart:convert';
 
 void main() async {
   // ----------------- login -----------------
-  int? userId = await login();
+  final userInfo = await login();
   // ----------------- Choose Choice -----------------
-  if (userId != null) {
-    await menu(userId);
+  if (userInfo != null) {
+    await menu(userInfo);
   }
 }
 
 //========== Future login ==========
-Future<int?> login() async {
+Future<Map<String, dynamic>?> login() async {
   print("===== Login =====");
   stdout.write("Username: ");
   String? username = stdin.readLineSync()?.trim();
@@ -27,8 +27,7 @@ Future<int?> login() async {
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    print("Welcome ${data['username']}!");
-    return data['userId'];
+    return data;
   } else {
     print(response.body);
     return null;
@@ -36,12 +35,13 @@ Future<int?> login() async {
 }
 
 //========== Future Menu ==========
-Future<void> menu(int userId) async {
-    print("===================== Expenses Tracking App =====================");
-    print("1. All expenses");
-    print("2. Today's expense");
-    print("3. Search expense");
-    print("4. Add expense");
-    print("5. Delete expense");
-    print("6. Exit");
+Future<void> menu(Map<String, dynamic> userInfo) async {
+  print("===================== Expenses Tracking App =====================");
+  print("Welcome ${userInfo['username']}");
+  print("1. All expenses");
+  print("2. Today's expense");
+  print("3. Search expense");
+  print("4. Add expense");
+  print("5. Delete expense");
+  print("6. Exit");
 }
