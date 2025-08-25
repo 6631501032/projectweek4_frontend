@@ -53,7 +53,7 @@ Future<void> menu(Map<String, dynamic> userInfo) async {
     } else if (choice == "2") {
       // get Today expenses
     } else if (choice == "3") {
-      // searching expenses
+      await searchExpense(userInfo['userId']);
     } else if (choice == "4") {
       // add expenses
     } else if (choice == "5") {
