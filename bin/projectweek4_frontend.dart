@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:projectweek4_frontend/Export_Feature_to_Main.dart';
+import 'package:projectweek4_frontend/Dev2_feature_GetAll&Today.dart';
+
 
 void main() async {
   // ----------------- login -----------------
@@ -50,8 +52,10 @@ Future<void> menu(Map<String, dynamic> userInfo) async {
     String? choice = stdin.readLineSync()?.trim();
     if (choice == "1") {
       // get all expenses
+      await getAllExpenses(userInfo['userId']);
     } else if (choice == "2") {
       // get Today expenses
+      await getTodayExpenses(userInfo['userId']);
     } else if (choice == "3") {
       // searching expenses
     } else if (choice == "4") {
