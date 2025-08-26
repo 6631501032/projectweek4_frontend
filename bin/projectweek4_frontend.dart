@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:projectweek4_frontend/Export_Feature_to_Main.dart';
 
+
 void main() async {
   // ----------------- login -----------------
   final userInfo = await login();
@@ -50,8 +51,10 @@ Future<void> menu(Map<String, dynamic> userInfo) async {
     String? choice = stdin.readLineSync()?.trim();
     if (choice == "1") {
       // get all expenses
+      await getAllExpenses(userInfo['userId']);
     } else if (choice == "2") {
       // get Today expenses
+      await getTodayExpenses(userInfo['userId']);
     } else if (choice == "3") {
       await searchExpense(userInfo['userId']);
     } else if (choice == "4") {
