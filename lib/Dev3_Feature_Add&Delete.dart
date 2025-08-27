@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 //========== Add Expense ==========
 Future<void> addExpense(Map<String, dynamic> userInfo) async {
   print("===== Add new item =====");
@@ -6,21 +10,23 @@ Future<void> addExpense(Map<String, dynamic> userInfo) async {
   stdout.write("Paid: ");
   String? paidStr = stdin.readLineSync()?.trim();
 
-  // Basic validation
-  if (item == null || paidStr == null) {
+  if (item == null || item.isEmpty || paidStr == null || paidStr.isEmpty) {
     print("Invalid input. Please try again.");
     return;
   }
 
   try {
-    final int paid = int.parse(paidStr);
-    final body = {
-      "user_id": userInfo['user_id'].toString(),
-      "item": item,
-      "paid": paid.toString(),
-    };
+    int.parse(paidStr);
+
     final url = Uri.parse('http://localhost:3000/add-expense');
-    final response = await http.post(url, body: body);
+    final response = await http.post(
+      url,
+      body: {
+        "user_id": userInfo['userId'].toString(),
+        "item": item,
+        "paid": paidStr,                           
+      },
+    );
 
     if (response.statusCode == 200) {
       print("Inserted!");
@@ -38,15 +44,27 @@ Future<void> deleteExpense(Map<String, dynamic> userInfo) async {
   stdout.write("Item id: ");
   String? idStr = stdin.readLineSync()?.trim();
 
-  if (idStr == null) {
+  if (idStr == null || idStr.isEmpty) {
     print("Invalid input. Please try again.");
     return;
   }
 
   try {
-    final int id = int.parse(idStr);
-    final url = Uri.parse('http://localhost:3000/delete-expense/$id');
-    final response = await http.delete(url);
+    int.parse(idStr);
+
+    final token = userInfo['token'];
+    if (token == null || token.toString().isEmpty) {
+      print("No token. Please login again.");
+      return;
+    }
+
+    final url = Uri.parse('http://localhost:3000/delete-expense/$idStr');
+    final response = await http.delete(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+    );
 
     if (response.statusCode == 200) {
       print("Deleted!");
