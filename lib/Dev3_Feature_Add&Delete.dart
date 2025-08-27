@@ -38,8 +38,9 @@ Future<void> addExpense(Map<String, dynamic> userInfo) async {
   }
 }
 
+
 //========== Delete Expense ==========
-Future<void> deleteExpense(Map<String, dynamic> userInfo) async {
+Future<void> deleteExpense(int? userId) async {
   print("===== Delete an item =====");
   stdout.write("Item id: ");
   String? idStr = stdin.readLineSync()?.trim();
@@ -50,24 +51,30 @@ Future<void> deleteExpense(Map<String, dynamic> userInfo) async {
   }
 
   try {
-    int.parse(idStr);
+    final int id = int.parse(idStr);
+    final url = Uri.parse('http://localhost:3000/delete-expense/$id');
 
-    final token = userInfo['token'];
-    if (token == null || token.toString().isEmpty) {
-      print("No token. Please login again.");
-      return;
-    }
-
-    final url = Uri.parse('http://localhost:3000/delete-expense/$idStr');
     final response = await http.delete(
       url,
-      headers: {
-        "Authorization": "Bearer $token",
-      },
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "user_id": userId, 
+      }),
     );
 
+    Map<String, dynamic>? responseBody;
+    try {
+      responseBody = jsonDecode(response.body);
+    } catch (_) {
+      responseBody = null;
+    }
+
     if (response.statusCode == 200) {
-      print("Deleted!");
+      print(responseBody?["message"] ?? "Deleted!");
+    } else if (response.statusCode == 404) {
+      print(responseBody?["error"] ?? "Expense not found.");
+    } else if (response.statusCode == 400) {
+      print(responseBody?["error"] ?? "Invalid request.");
     } else {
       print("Failed to delete expense: ${response.body}");
     }
