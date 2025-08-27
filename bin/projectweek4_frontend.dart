@@ -59,8 +59,10 @@ Future<void> menu(Map<String, dynamic> userInfo) async {
       await searchExpense(userInfo['userId']);
     } else if (choice == "4") {
       // add expenses
+      await addExpense(userInfo);
     } else if (choice == "5") {
       // delete expenses
+      await deleteExpense(userInfo['userId']);
     } else if (choice == "6") {
       print("Exiting menu...");
       break;
